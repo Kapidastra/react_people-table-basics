@@ -1,5 +1,6 @@
 import React from 'react';
 import { Person } from '../../types';
+import { Link } from 'react-router-dom';
 
 interface Props {
   person?: Person;
@@ -12,19 +13,13 @@ export const PersonLink: React.FC<Props> = ({ person, name }) => {
   }
 
   if (person) {
-    const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-      event.preventDefault();
-      window.location.hash = `#/people/${person.slug}`;
-    };
-
     return (
-      <a
-        href={`#/people/${person.slug}`}
-        onClick={handleClick}
+      <Link
+        to={`/people/${person.slug}`}
         className={person.sex === 'f' ? 'has-text-danger' : ''}
       >
         {name}
-      </a>
+      </Link>
     );
   }
 

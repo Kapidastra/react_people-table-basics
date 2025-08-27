@@ -3,33 +3,21 @@ import { getPeople } from '../api';
 import { Loader } from '../components/Loader';
 import { Person } from '../types';
 import { PersonLink } from '../components/PersonLink/PersonLink';
+import { useParams } from 'react-router-dom';
 
 export const PeoplePage: React.FC = () => {
   const [people, setPeople] = useState<Person[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [selectedPersonSlug, setSelectedPersonSlug] = useState<string | null>(
-    null,
-  );
+
+  // отримуємо slug з URL
+  const { slug } = useParams<{ slug?: string }>();
 
   useEffect(() => {
     getPeople()
       .then(setPeople)
       .catch(() => setError(true))
       .finally(() => setLoading(false));
-  }, []);
-
-  useEffect(() => {
-    const handleHashChange = () => {
-      const slug = window.location.hash.replace('#/people/', '');
-
-      setSelectedPersonSlug(slug || null);
-    };
-
-    handleHashChange(); // одразу після завантаження
-    window.addEventListener('hashchange', handleHashChange);
-
-    return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
   return (
@@ -72,10 +60,8 @@ export const PeoplePage: React.FC = () => {
                     key={person.slug}
                     data-cy="person"
                     className={
-                      person.slug === selectedPersonSlug
-                        ? 'has-background-warning'
-                        : ''
-                    }
+                      person.slug === slug ? 'has-background-warning' : ''
+                    } // підсвітка
                   >
                     <td>
                       <PersonLink person={person} name={person.name} />
