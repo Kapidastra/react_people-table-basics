@@ -14,7 +14,19 @@ export const PeoplePage: React.FC = () => {
 
   useEffect(() => {
     getPeople()
-      .then(setPeople)
+      .then(fetchedPeople => {
+        const peopleMap: Record<string, Person> = Object.fromEntries(
+          fetchedPeople.map(p => [p.name, p]),
+        );
+
+        const peopleWithParents = fetchedPeople.map(p => ({
+          ...p,
+          mother: p.motherName ? peopleMap[p.motherName] : undefined,
+          father: p.fatherName ? peopleMap[p.fatherName] : undefined,
+        }));
+
+        setPeople(peopleWithParents);
+      })
       .catch(() => setError(true))
       .finally(() => setLoading(false));
   }, []);
