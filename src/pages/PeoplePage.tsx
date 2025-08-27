@@ -10,7 +10,6 @@ export const PeoplePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  // отримуємо slug з URL
   const { slug } = useParams<{ slug?: string }>();
 
   useEffect(() => {
@@ -61,7 +60,7 @@ export const PeoplePage: React.FC = () => {
                     data-cy="person"
                     className={
                       person.slug === slug ? 'has-background-warning' : ''
-                    } // підсвітка
+                    }
                   >
                     <td>
                       <PersonLink person={person} name={person.name} />
